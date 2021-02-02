@@ -14,8 +14,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.openclassrooms.entrevoisins.R;
 import com.openclassrooms.entrevoisins.di.DI;
+import com.openclassrooms.entrevoisins.events.AddNeighbourEvent;
+import com.openclassrooms.entrevoisins.events.DeleteNeighbourEvent;
 import com.openclassrooms.entrevoisins.model.Neighbour;
 import com.openclassrooms.entrevoisins.service.NeighbourApiService;
+
+import org.greenrobot.eventbus.EventBus;
 
 
 public class InfoNeighbourActivity extends AppCompatActivity {
@@ -45,6 +49,18 @@ public class InfoNeighbourActivity extends AppCompatActivity {
         getIncomingIntent();
         fabOnclickListner();
         mFavApiService = DI.getNeighbourApiService();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     private void getIncomingIntent(){
@@ -82,8 +98,6 @@ public class InfoNeighbourActivity extends AppCompatActivity {
                     .load(imageUrl)
                     .into(imageAvatar);
 
-
-
             btnFavorie = findViewById(R.id.floatingButtonFavorie);
             if (isFavorite) {
                 btnFavorie.setImageResource(R.drawable.ic_baseline_star_yellow_24);
@@ -107,11 +121,13 @@ public class InfoNeighbourActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!isFavorite){
+                    //EventBus.getDefault().post(new AddNeighbourEvent(neighbour));
                     btnFavorie.setImageResource(R.drawable.ic_baseline_star_yellow_24);
                     btnFavorie.hide();
                     btnFavorie.show();
                     addFavoriteNeighbour(v);
                 }else{
+                    //EventBus.getDefault().post(new DeleteNeighbourEvent(neighbour));
                     btnFavorie.setImageResource(R.drawable.ic_baseline_star_border_yellow_24);
                     btnFavorie.hide();
                     btnFavorie.show();
