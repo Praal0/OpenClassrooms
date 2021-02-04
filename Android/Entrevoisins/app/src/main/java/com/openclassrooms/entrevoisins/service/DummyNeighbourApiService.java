@@ -11,6 +11,7 @@ import java.util.List;
 public class DummyNeighbourApiService implements  NeighbourApiService {
 
     private List<Neighbour> neighbours = DummyNeighbourGenerator.generateNeighbours();
+    private List<Neighbour> neighbourfav = new ArrayList<Neighbour>();
 
 
     /**
@@ -40,7 +41,7 @@ public class DummyNeighbourApiService implements  NeighbourApiService {
     }
 
     @Override
-    public List<Neighbour> getFavoriteNeighbours() {
+    /*public List<Neighbour> getFavoriteNeighbours() {
         List<Neighbour> favoriteList = new ArrayList<>();
         for (Neighbour neighbour : getNeighbours()) {
             if (neighbour.isFavorite()) {
@@ -48,6 +49,10 @@ public class DummyNeighbourApiService implements  NeighbourApiService {
             }
         }
         return favoriteList;
+    }*/
+
+    public List<Neighbour> getFavoriteNeighbours() {
+        return neighbourfav;
     }
 
     /**
@@ -56,13 +61,18 @@ public class DummyNeighbourApiService implements  NeighbourApiService {
      */
 
     @Override
-    public void addFavoriteNeighbour(Neighbour neighbour) {
+    /*public void addFavoriteNeighbour(Neighbour neighbour) {
         for (Neighbour neighbour1 : getNeighbours()) {
             if (neighbour.equals(neighbour1)) {
                 neighbour1.setFavorite(true);
             }
         }
+    }*/
+    public void addFavoriteNeighbour(Neighbour neighbour){
+        neighbourfav.add(neighbour);
+        neighbour.setFavorite(true);
     }
+
 
     /**
      * Delete a favorite neighbour
@@ -70,12 +80,15 @@ public class DummyNeighbourApiService implements  NeighbourApiService {
      */
 
     @Override
-    public void deleteFavoriteNeighbour(Neighbour neighbourfav) {
-        for (Neighbour neighbour1 : getNeighbours()) {
+    public void deleteFavoriteNeighbour(Neighbour neighbourdel) {
+        /*for (Neighbour neighbour1 : getNeighbours()) {
             if (neighbourfav.equals(neighbour1)) {
                 neighbour1.setFavorite(false);
             }
-        }
+        }*/
+        neighbourfav.remove(neighbourdel);
+        neighbourdel.setFavorite(false);
+
     }
 
 }

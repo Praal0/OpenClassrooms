@@ -14,8 +14,13 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.openclassrooms.entrevoisins.R;
 import com.openclassrooms.entrevoisins.di.DI;
+import com.openclassrooms.entrevoisins.events.AddNeighbourEvent;
+import com.openclassrooms.entrevoisins.events.DeleteNeighbourEvent;
 import com.openclassrooms.entrevoisins.model.Neighbour;
 import com.openclassrooms.entrevoisins.service.NeighbourApiService;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 
 public class InfoNeighbourActivity extends AppCompatActivity {
@@ -125,7 +130,7 @@ public class InfoNeighbourActivity extends AppCompatActivity {
 
         Context context = InfoNeighbourActivity.this;
 
-        mFavApiService.addFavoriteNeighbour(neighbour);
+        EventBus.getDefault().post(new AddNeighbourEvent(neighbour));
         isFavorite = true;
         Snackbar.make(view, "Vous venez d'ajouter " + name.getText() + " à vos voisins favoris !", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
@@ -144,12 +149,12 @@ public class InfoNeighbourActivity extends AppCompatActivity {
     }
 
     private void deleteFavoriteNeighbour(View view) {
-        Context context = InfoNeighbourActivity.this;
 
+        EventBus.getDefault().post(new DeleteNeighbourEvent(neighbour));
+
+        Context context = InfoNeighbourActivity.this;
         Snackbar.make(view, "Vous venez de retirer " + name.getText() + " de vos voisins favoris !", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
-        isFavorite = false;
-        mFavApiService.deleteFavoriteNeighbour(neighbour);
 
         Notification notification = new Notification.Builder(context)
                 .setSmallIcon(R.drawable.ic_star_border_white_24dp)
@@ -163,6 +168,17 @@ public class InfoNeighbourActivity extends AppCompatActivity {
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
         notifManager.notify( NOTIF_ID, notification );
     }
+
+    @Subscribe
+    public void onDeleteNeighbour(DeleteNeighbourEvent event) {
+        mFavApiService.deleteFavoriteNeighbour(event.neighbour);
+    }
+
+    @Subscribe
+    public void onAddNeighbour(AddNeighbourEvent event) {
+        mFavApiService.addFavoriteNeighbour(event.neighbour);
+    }
+
 
 
 }
