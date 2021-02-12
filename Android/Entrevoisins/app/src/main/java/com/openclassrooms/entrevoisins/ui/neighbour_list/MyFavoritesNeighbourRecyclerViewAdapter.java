@@ -31,8 +31,6 @@ import static com.openclassrooms.entrevoisins.ui.neighbour_list.MyNeighbourRecyc
 public class MyFavoritesNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyFavoritesNeighbourRecyclerViewAdapter.ViewHolder> {
 
     private final List<Neighbour> mNeighbours;
-    private NeighbourApiService mFavApiService;
-
 
 
     public MyFavoritesNeighbourRecyclerViewAdapter(List<Neighbour> items) {
@@ -41,7 +39,6 @@ public class MyFavoritesNeighbourRecyclerViewAdapter extends RecyclerView.Adapte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        mFavApiService = DI.getNeighbourApiService();
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_neighbour, parent, false);
         return new ViewHolder(view);
@@ -66,7 +63,6 @@ public class MyFavoritesNeighbourRecyclerViewAdapter extends RecyclerView.Adapte
             }
         });
 
-        // When we click on a personne we send all data for InfoActiviy
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
