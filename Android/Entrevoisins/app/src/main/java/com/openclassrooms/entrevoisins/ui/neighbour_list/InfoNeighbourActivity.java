@@ -164,7 +164,7 @@ public class InfoNeighbourActivity extends AppCompatActivity {
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
         notifManager.notify( NOTIF_ID, notification );
 
-        // After 3 secondes we cancel notification
+        // After 5 secondes we cancel notification
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
@@ -194,13 +194,13 @@ public class InfoNeighbourActivity extends AppCompatActivity {
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
         notifManager.notify( NOTIF_ID, notification );
 
-        // After 3 secondes we cancel notification
+        // After 5 secondes we cancel notification
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
                 notifManager.cancel(NOTIF_ID);
             }
-        }, 5000);   //3 seconds
+        }, 5000);   //5 seconds
 
     }
 

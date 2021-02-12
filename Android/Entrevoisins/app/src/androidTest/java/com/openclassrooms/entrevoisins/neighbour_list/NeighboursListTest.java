@@ -28,8 +28,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.Serializable;
 import java.util.List;
 
+import static com.openclassrooms.entrevoisins.ui.neighbour_list.MyNeighbourRecyclerViewAdapter.DETAIL_NEIGHBOUR;
 import static org.junit.Assert.assertEquals;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -55,6 +57,7 @@ public class NeighboursListTest {
     private static int ITEMS_COUNT = 12;
     private static int ITEMS_EMPTY = 0;
     private Neighbour fakeInfoNeighbour;
+    private Neighbour fakeInfoNeighbourDell;
     private String facebookNeighbourg;
     private int NotificationId = 123;
     private UiDevice uiDevice;
@@ -79,6 +82,8 @@ public class NeighboursListTest {
         mNeighbours = mApiService.getNeighbours();
         fakeInfoNeighbour = new Neighbour(1, "Caroline", "https://i.pravatar.cc/150?u=a042581f4e29026704d", "Saint-Pierre-du-Mont ; 5km",
                 "+33 6 86 57 90 14",  "Bonjour !Je souhaiterais faire de la marche nordique. Pas initiée, je recherche une ou plusieurs personnes susceptibles de m'accompagner !J'aime les jeux de cartes tels la belote et le tarot..",false);
+        fakeInfoNeighbourDell = new Neighbour(1, "Caroline", "https://i.pravatar.cc/150?u=a042581f4e29026704d", "Saint-Pierre-du-Mont ; 5km",
+                "+33 6 86 57 90 14",  "Bonjour !Je souhaiterais faire de la marche nordique. Pas initiée, je recherche une ou plusieurs personnes susceptibles de m'accompagner !J'aime les jeux de cartes tels la belote et le tarot..",true);
         facebookNeighbourg = "www.Facebook.com/" + fakeInfoNeighbour.getName();
         uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
@@ -124,13 +129,7 @@ public class NeighboursListTest {
     public void myNeighbourDetail_TestFabSnackBar() {
         // Given : We launch InfoNeighbourActivity with fake neighbour.
         Intent intent = new Intent();
-        intent.putExtra("neighbour_Id",fakeInfoNeighbour.getId());
-        intent.putExtra("neighbour_Name",fakeInfoNeighbour.getName());
-        intent.putExtra("neighbour_AboutMe",fakeInfoNeighbour.getAboutMe());
-        intent.putExtra("neighbour_AvatarUrl",fakeInfoNeighbour.getAvatarUrl());
-        intent.putExtra("neighbour_PhoneNumber",fakeInfoNeighbour.getPhoneNumber());
-        intent.putExtra("neighbour_Adresse",fakeInfoNeighbour.getAddress());
-        intent.putExtra("neighbour_isFavorite",fakeInfoNeighbour.isFavorite());
+        intent.putExtra(DETAIL_NEIGHBOUR, (Serializable) fakeInfoNeighbour);
         InfoNeighbourActivityTestRule.launchActivity(intent);
 
         // When perform click on fab to add favorite neighbour
@@ -189,71 +188,4 @@ public class NeighboursListTest {
 
     }
 
-    @Test
-    public void myNeighbourDetail_TestFabAddNotification(){
-        String expectedAppName = "Entrevoisins";
-        String expectedTitle = "Ajout Favorie";
-        String expectedText = "Caroline fait maintenant partie de vos favoris";
-
-
-        // Given : We launch InfoNeighbourActivity with fake neighbour.
-        Intent intent = new Intent();
-        intent.putExtra("neighbour_Id",fakeInfoNeighbour.getId());
-        intent.putExtra("neighbour_Name",fakeInfoNeighbour.getName());
-        intent.putExtra("neighbour_AboutMe",fakeInfoNeighbour.getAboutMe());
-        intent.putExtra("neighbour_AvatarUrl",fakeInfoNeighbour.getAvatarUrl());
-        intent.putExtra("neighbour_PhoneNumber",fakeInfoNeighbour.getPhoneNumber());
-        intent.putExtra("neighbour_Adresse",fakeInfoNeighbour.getAddress());
-        intent.putExtra("neighbour_isFavorite",fakeInfoNeighbour.isFavorite());
-        InfoNeighbourActivityTestRule.launchActivity(intent);
-
-        // When perform click on fab to add favorite neighbour
-        onView(withId(R.id.floatingButtonFavorie)).perform(ViewActions.click());
-
-        // We open notification
-        uiDevice.openNotification();
-        uiDevice.wait(Until.hasObject(By.textStartsWith(expectedAppName)), 5);
-        UiObject2 title = uiDevice.findObject(By.text(expectedTitle));
-        UiObject2 texte = uiDevice.findObject(By.text(expectedText));
-
-        // Then : We check texte in notification
-        assertEquals(expectedTitle,title.getText());
-        assertEquals(expectedText,texte.getText());
-
-        // We remove neighbour for other test after
-        onView(withId(R.id.floatingButtonFavorie)).perform(ViewActions.click());
-    }
-
-    @Test
-    public void myNeighbourDetail_TestFabSuppNotification(){
-        String expectedAppName = "Entrevoisins";
-        UiDevice uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        String expectedTitle = "Suppression Favorie";
-        String expectedText = "Caroline ne fait plus partie de vos favoris";
-
-        // Given : We launch InfoNeighbourActivity with fake neighbour.
-        Intent intent = new Intent();
-        intent.putExtra("neighbour_Id",fakeInfoNeighbour.getId());
-        intent.putExtra("neighbour_Name",fakeInfoNeighbour.getName());
-        intent.putExtra("neighbour_AboutMe",fakeInfoNeighbour.getAboutMe());
-        intent.putExtra("neighbour_AvatarUrl",fakeInfoNeighbour.getAvatarUrl());
-        intent.putExtra("neighbour_PhoneNumber",fakeInfoNeighbour.getPhoneNumber());
-        intent.putExtra("neighbour_Adresse",fakeInfoNeighbour.getAddress());
-        intent.putExtra("neighbour_isFavorite",true);
-        InfoNeighbourActivityTestRule.launchActivity(intent);
-
-        // When perform click on fab to add favorite neighbour
-        onView(withId(R.id.floatingButtonFavorie)).perform(ViewActions.click());
-
-        // We open notification
-        uiDevice.openNotification();
-        uiDevice.wait(Until.hasObject(By.textStartsWith(expectedAppName)), 5);
-        UiObject2 title = uiDevice.findObject(By.text(expectedTitle));
-        UiObject2 texte = uiDevice.findObject(By.text(expectedText));
-
-        // Then : We check texte in notification
-        assertEquals(expectedTitle,title.getText());
-        assertEquals(expectedText,texte.getText());
-
-    }
 }
