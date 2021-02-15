@@ -71,7 +71,7 @@ public class NeighboursListTest {
     @Rule
     public ActivityTestRule<ListNeighbourActivity> mActivityRule =
             new ActivityTestRule(ListNeighbourActivity.class);
-    public ActivityTestRule<InfoNeighbourActivity> InfoNeighbourActivityTestRule =
+    public ActivityTestRule<InfoNeighbourActivity> mInfoNeighbourActivityTestRule =
             new ActivityTestRule(InfoNeighbourActivity.class);
 
     @Before
@@ -85,8 +85,6 @@ public class NeighboursListTest {
         fakeInfoNeighbourDell = new Neighbour(1, "Caroline", "https://i.pravatar.cc/150?u=a042581f4e29026704d", "Saint-Pierre-du-Mont ; 5km",
                 "+33 6 86 57 90 14",  "Bonjour !Je souhaiterais faire de la marche nordique. Pas initiée, je recherche une ou plusieurs personnes susceptibles de m'accompagner !J'aime les jeux de cartes tels la belote et le tarot..",true);
         facebookNeighbourg = "www.Facebook.com/" + fakeInfoNeighbour.getName();
-        uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-
     }
 
     /**
@@ -130,7 +128,7 @@ public class NeighboursListTest {
         // Given : We launch InfoNeighbourActivity with fake neighbour.
         Intent intent = new Intent();
         intent.putExtra(DETAIL_NEIGHBOUR, (Serializable) fakeInfoNeighbour);
-        InfoNeighbourActivityTestRule.launchActivity(intent);
+        mInfoNeighbourActivityTestRule.launchActivity(intent);
 
         // When perform click on fab to add favorite neighbour
         onView(withId(R.id.floatingButtonFavorie)).perform(ViewActions.click());
