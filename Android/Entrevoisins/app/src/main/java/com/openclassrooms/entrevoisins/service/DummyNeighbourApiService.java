@@ -76,7 +76,6 @@ public class DummyNeighbourApiService implements  NeighbourApiService {
         for (Neighbour neighbour1 : getNeighbours()) {
             if (neighbourfav.equals(neighbour1)) {
                 neighbour1.setFavorite(false);
-
                 break;
             }
         }

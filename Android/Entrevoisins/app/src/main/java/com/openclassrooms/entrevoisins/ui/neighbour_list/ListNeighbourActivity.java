@@ -40,7 +40,7 @@ public class ListNeighbourActivity extends AppCompatActivity implements RefreshI
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 1) {
-                    refreshAdapterFragment();
+                    refreshAdapterFragmentB();
                 }
                 mViewPager.setCurrentItem(tab.getPosition());
             }
@@ -63,7 +63,7 @@ public class ListNeighbourActivity extends AppCompatActivity implements RefreshI
     }
 
     @Override
-    public void refreshAdapterFragment() {
+    public void refreshAdapterFragmentB() {
         mPagerAdapter.mNeighbourgFavorisFragment.refreshAdapter();
     }
 }
