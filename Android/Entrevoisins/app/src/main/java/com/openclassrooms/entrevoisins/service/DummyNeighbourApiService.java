@@ -45,6 +45,7 @@ public class DummyNeighbourApiService implements  NeighbourApiService {
         for (Neighbour neighbour : getNeighbours()) {
             if (neighbour.isFavorite()) {
                 favoriteList.add(neighbour);
+                break;
             }
         }
         return favoriteList;
@@ -60,6 +61,7 @@ public class DummyNeighbourApiService implements  NeighbourApiService {
         for (Neighbour neighbour1 : getNeighbours()) {
             if (neighbour.equals(neighbour1)) {
                 neighbour1.setFavorite(true);
+                break;
             }
         }
     }
@@ -74,6 +76,7 @@ public class DummyNeighbourApiService implements  NeighbourApiService {
         for (Neighbour neighbour1 : getNeighbours()) {
             if (neighbourfav.equals(neighbour1)) {
                 neighbour1.setFavorite(false);
+                break;
             }
         }
     }

@@ -2,18 +2,14 @@ package com.openclassrooms.entrevoisins.neighbour_list;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.test.InstrumentationRegistry;
+
+import android.support.test.espresso.Espresso;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
-import android.support.test.uiautomator.UiObject2;
-import android.support.test.uiautomator.Until;
-import android.support.test.uiautomator.By;
-import android.support.v4.app.NotificationManagerCompat;
-
 
 import com.openclassrooms.entrevoisins.R;
 import com.openclassrooms.entrevoisins.di.DI;
@@ -42,9 +38,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.openclassrooms.entrevoisins.utils.RecyclerViewItemCountAssertion.withItemCount;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+
 
 
 /**
@@ -60,7 +55,6 @@ public class NeighboursListTest {
     private Neighbour fakeInfoNeighbourDell;
     private String facebookNeighbourg;
     private int NotificationId = 123;
-    private UiDevice uiDevice;
     private NeighbourApiService mApiService;
     private List<Neighbour> mNeighbours;
     private Context mContext;
@@ -73,6 +67,9 @@ public class NeighboursListTest {
             new ActivityTestRule(ListNeighbourActivity.class);
     public ActivityTestRule<InfoNeighbourActivity> mInfoNeighbourActivityTestRule =
             new ActivityTestRule(InfoNeighbourActivity.class);
+
+    public NeighboursListTest() {
+    }
 
     @Before
     public void setUp() {
@@ -155,6 +152,7 @@ public class NeighboursListTest {
 
     @Test
     public void addNeighbourFavories(){
+        UiDevice uiDevice = null;
         // Given : We click on Caroline to open detail
         onView(ViewMatchers.withId(R.id.list_neighbours))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, ViewActions.click()));
@@ -162,7 +160,7 @@ public class NeighboursListTest {
         // When perform click on fab to add favorite neighbour
         onView(withId(R.id.floatingButtonFavorie)).perform(ViewActions.click());
         // When Return to list
-        uiDevice.pressBack();
+        Espresso.pressBack();
 
         // When click to tab view favories
         onView(ViewMatchers.withText("FAVORIES")).perform(ViewActions.click());
