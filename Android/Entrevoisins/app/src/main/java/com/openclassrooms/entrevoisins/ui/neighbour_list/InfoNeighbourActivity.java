@@ -3,6 +3,7 @@ package com.openclassrooms.entrevoisins.ui.neighbour_list;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.os.Build;
 import android.os.Handler;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -44,7 +45,7 @@ public class InfoNeighbourActivity extends AppCompatActivity {
     private static final int NOTIF_ID = 123;
     private Toolbar toolbar;
     private boolean favorie;
-
+    private Notification notification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,7 +187,7 @@ public class InfoNeighbourActivity extends AppCompatActivity {
         EventBus.getDefault().post(new DeleteNeighbourFavorisEvent(neighbour));
 
         //Show notification when we remove neighbour in favoris list
-        Notification notification = new Notification.Builder(context)
+        notification = new Notification.Builder(context)
                 .setSmallIcon(R.drawable.ic_star_border_white_24dp)
                 .setWhen(System.currentTimeMillis())
                 .setAutoCancel(true)

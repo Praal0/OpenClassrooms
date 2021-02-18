@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class ListNeighbourPagerAdapter extends FragmentPagerAdapter {
 
+    public NeighbourFragment mNeighbourgFragment = new NeighbourFragment();
+    public FavoriteNeighboursFragment mNeighbourgFavorisFragment = new FavoriteNeighboursFragment();
     public ListNeighbourPagerAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -22,10 +24,10 @@ public class ListNeighbourPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new NeighbourFragment();
+                return mNeighbourgFragment;
                 // Update for use fragment for favorie list
             case 1:
-                return new FavoriteNeighboursFragment();
+                return mNeighbourgFavorisFragment;
         }
         return null;
     }

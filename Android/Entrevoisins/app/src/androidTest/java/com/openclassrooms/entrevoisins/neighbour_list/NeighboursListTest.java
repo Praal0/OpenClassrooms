@@ -152,7 +152,6 @@ public class NeighboursListTest {
 
     @Test
     public void addNeighbourFavories(){
-        UiDevice uiDevice = null;
         // Given : We click on Caroline to open detail
         onView(ViewMatchers.withId(R.id.list_neighbours))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, ViewActions.click()));

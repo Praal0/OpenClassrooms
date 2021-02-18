@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 import com.openclassrooms.entrevoisins.R;
 import com.openclassrooms.entrevoisins.di.DI;
@@ -31,6 +32,7 @@ public class FavoriteNeighboursFragment extends Fragment {
     private NeighbourApiService mFavApiService;
     private List<Neighbour> mFavNeighbour;
     private RecyclerView mFavRecyclerView;
+    public MyFavoritesNeighbourRecyclerViewAdapter favoriteAdapter;
 
 
     /**
@@ -64,7 +66,8 @@ public class FavoriteNeighboursFragment extends Fragment {
      */
     private void initList() {
         mFavNeighbour = mFavApiService.getFavoriteNeighbours();
-        mFavRecyclerView.setAdapter(new MyFavoritesNeighbourRecyclerViewAdapter(mFavNeighbour));
+        favoriteAdapter = new MyFavoritesNeighbourRecyclerViewAdapter(mFavNeighbour);
+        mFavRecyclerView.setAdapter(favoriteAdapter);
     }
 
     @Override
@@ -83,6 +86,12 @@ public class FavoriteNeighboursFragment extends Fragment {
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+    }
+
+    public void refreshAdapter(){
+        if (favoriteAdapter != null){
+            favoriteAdapter.notifyDataSetChanged();
+        }
     }
 
     /**

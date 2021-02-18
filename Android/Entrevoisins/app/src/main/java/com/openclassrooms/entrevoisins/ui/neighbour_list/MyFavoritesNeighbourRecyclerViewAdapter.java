@@ -93,3 +93,5 @@ public class MyFavoritesNeighbourRecyclerViewAdapter extends RecyclerView.Adapte
         }
     }
 }
+
+
