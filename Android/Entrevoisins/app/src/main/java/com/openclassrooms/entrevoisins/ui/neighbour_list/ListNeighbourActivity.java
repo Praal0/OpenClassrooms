@@ -13,7 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ListNeighbourActivity extends AppCompatActivity implements RefreshInterface{
+public class ListNeighbourActivity extends AppCompatActivity {
 
     // UI Components
     @BindView(R.id.tabs)
@@ -39,9 +39,6 @@ public class ListNeighbourActivity extends AppCompatActivity implements RefreshI
 
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getPosition() == 1) {
-                    refreshAdapterFragmentB();
-                }
                 mViewPager.setCurrentItem(tab.getPosition());
             }
 
@@ -62,8 +59,5 @@ public class ListNeighbourActivity extends AppCompatActivity implements RefreshI
         AddNeighbourActivity.navigate(this);
     }
 
-    @Override
-    public void refreshAdapterFragmentB() {
-        mPagerAdapter.mNeighbourgFavorisFragment.refreshAdapter();
-    }
+
 }

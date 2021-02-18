@@ -95,6 +95,3 @@ public class NeighbourFragment extends Fragment {
     }
 }
 
-interface RefreshInterface{
-    public void refreshAdapterFragmentB();
-}
