@@ -1,13 +1,17 @@
 package com.openclassrooms.entrevoisins.ui.neighbour_list;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -46,6 +50,7 @@ public class InfoNeighbourActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private boolean favorie;
     private Notification notification;
+    private CharSequence verseurl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +153,7 @@ public class InfoNeighbourActivity extends AppCompatActivity {
     private void addFavoriteNeighbour(View view) {
 
         favorie = true;
+
         Context context = InfoNeighbourActivity.this;
 
         EventBus.getDefault().post(new AddNeighbourgFavorisEvent(neighbour));
@@ -156,23 +162,33 @@ public class InfoNeighbourActivity extends AppCompatActivity {
                 .setAction("Action", null).show();
 
         //Show notification when we add neighbour in favoris list
-        Notification notification = new Notification.Builder(context)
-                .setSmallIcon(R.drawable.ic_star_white_24dp)
-                .setWhen(System.currentTimeMillis())
-                .setAutoCancel(true)
-                .setContentTitle("Ajout Favorie")
-                .setContentText( name.getText() + " fait maintenant partie de vos favoris" )
-                .build();
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(context.getApplicationContext(), "notify_add");
 
-        NotificationManager notifManager = (NotificationManager)
-                context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notifManager.notify( NOTIF_ID, notification );
+
+        mBuilder.setSmallIcon(R.drawable.ic_star_white_24dp);
+        mBuilder.setContentTitle("Ajout Favorie");
+        mBuilder.setContentText(name.getText() + " fait maintenant partie de vos favoris");
+        mBuilder.setPriority(Notification.PRIORITY_MAX);
+
+        NotificationManager mNotificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("notify_add",
+                    "Channel add favoris",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            mNotificationManager.createNotificationChannel(channel);
+        }
+
+        mNotificationManager.notify(NOTIF_ID, mBuilder.build());
 
         // After 5 secondes we cancel notification
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                notifManager.cancel(NOTIF_ID);
+                mNotificationManager.cancel(NOTIF_ID);
             }
         }, 5000);   //5 seconds
     }
@@ -180,30 +196,42 @@ public class InfoNeighbourActivity extends AppCompatActivity {
     // Delete Neighbours in favoris list
     private void deleteFavoriteNeighbour(View view) {
         favorie = false;
-        Context context = InfoNeighbourActivity.this;
+
+        Context mContext = InfoNeighbourActivity.this;
+
+        EventBus.getDefault().post(new DeleteNeighbourFavorisEvent(neighbour));
 
         Snackbar.make(view, "Vous venez de retirer " + name.getText() + " de vos voisins favoris !", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
-        EventBus.getDefault().post(new DeleteNeighbourFavorisEvent(neighbour));
 
         //Show notification when we remove neighbour in favoris list
-        notification = new Notification.Builder(context)
-                .setSmallIcon(R.drawable.ic_star_border_white_24dp)
-                .setWhen(System.currentTimeMillis())
-                .setAutoCancel(true)
-                .setContentTitle("Suppression Favorie")
-                .setContentText( name.getText() + " ne fait plus partie de vos favoris" )
-                .build();
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(mContext.getApplicationContext(), "notify_delete");
 
-        NotificationManager notifManager = (NotificationManager)
-                context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notifManager.notify( NOTIF_ID, notification );
+
+        mBuilder.setSmallIcon(R.drawable.ic_star_border_white_24dp);
+        mBuilder.setContentTitle("Suppression Favorie");
+        mBuilder.setContentText(name.getText() + " ne fait plus partie de vos favoris");
+        mBuilder.setPriority(Notification.PRIORITY_MAX);
+
+        NotificationManager mNotificationManager =
+                (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("notify_delete",
+                    "Channel delete favoris",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            mNotificationManager.createNotificationChannel(channel);
+        }
+
+        mNotificationManager.notify(NOTIF_ID, mBuilder.build());
 
         // After 5 secondes we cancel notification
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                notifManager.cancel(NOTIF_ID);
+                mNotificationManager.cancel(NOTIF_ID);
             }
         }, 5000);   //5 seconds
 
